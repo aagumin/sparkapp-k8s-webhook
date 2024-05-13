@@ -8,18 +8,21 @@ import (
 	"github.com/GoogleCloudPlatform/spark-on-k8s-operator/pkg/apis/sparkoperator.k8s.io/v1beta2"
 	v1 "k8s.io/api/admission/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"log"
 	"log/slog"
 	"net/http"
 )
 
 type WebHook struct {
-	mutateConfig *SparkAppConfig
+	MutateConfig *SparkAppConfig
+	//errLog       slog.Logger
 }
 
 func (wh *WebHook) serveHealth(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 	_, err := fmt.Fprint(w, "Ok")
 	if err != nil {
+		slog.Info("Health success", w.Header().Get("Status"))
 		return
 	}
 }
@@ -34,6 +37,7 @@ func (wh *WebHook) mutateReview(w http.ResponseWriter, r *http.Request) {
 	var sparkApp *v1beta2.SparkApplication
 
 	admReview, err := parseAdmRequest(*r)
+	slog.Debug("Successfully parsed adm review request", admReview)
 	if err != nil {
 		errS := err.Error()
 		slog.Error(errS)
@@ -42,6 +46,8 @@ func (wh *WebHook) mutateReview(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sparkApp, err = parseSparkApp(*admReview)
+	slog.Debug("Successfully parsed sparkApp from adm request", sparkApp)
+
 	if err != nil {
 		errS := err.Error()
 		slog.Error(errS)
@@ -49,7 +55,8 @@ func (wh *WebHook) mutateReview(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sparkAppPatches := mutateSparkApplication(sparkApp, wh.mutateConfig)
+	sparkAppPatches := mutateSparkApplication(sparkApp, wh.MutateConfig)
+	slog.Debug("Successfully patch spark app", sparkAppPatches)
 
 	marshal, err := json.Marshal(sparkAppPatches)
 	if err != nil {
@@ -87,7 +94,7 @@ func (wh *WebHook) mutateReview(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (wh *WebHook) RunWebhookServer(certFile, keyFile string, port uint) {
+func (wh *WebHook) RunWebhookServer(certFile, keyFile string, port uint, logger *log.Logger) {
 	cert, err := tls.LoadX509KeyPair(certFile, keyFile)
 	if err != nil {
 		panic(err)
@@ -96,10 +103,12 @@ func (wh *WebHook) RunWebhookServer(certFile, keyFile string, port uint) {
 	http.HandleFunc("/health", wh.serveHealth)
 	http.HandleFunc("/mutate", wh.mutateReview)
 	server := http.Server{
+
 		Addr: fmt.Sprintf(":%d", port),
 		TLSConfig: &tls.Config{
 			Certificates: []tls.Certificate{cert},
 		},
+		ErrorLog: logger,
 	}
 
 	if err := server.ListenAndServeTLS("", ""); err != nil {

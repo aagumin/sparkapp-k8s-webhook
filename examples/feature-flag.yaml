@@ -1,14 +1,14 @@
 FeatureList:
-  - addToleration:
+  Toleration:
       enabled: True
       hardPatch: True
-  - addAffinity:
+  Affinity:
       enabled: True
       hardPatch: True
-  - addHistoryServer:
+  HistoryServer:
       enabled: True
       hardPatch: True
-  - addPrometheusMonitoring:
+  PrometheusMonitoring:
       enabled: True
       hardPatch: True
 

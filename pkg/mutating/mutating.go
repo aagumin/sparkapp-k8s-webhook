@@ -12,9 +12,9 @@ func mutateSparkApplication(sparkApp *v1beta2.SparkApplication, cfg *SparkAppCon
 	annotations := sparkApp.Annotations
 	teamId := annotations["amazme.spark.app"]
 
-	if cfg.featureFlag.Affinity.Enabled && cfg.featureFlag.Toleration.Enabled {
-		result = append(result, addAffinity(sparkApp, cfg.patchValues.AmazmeSparkAffinity[teamId], cfg.featureFlag.Affinity.HardPatch)...)
-		result = append(result, addToleration(sparkApp, cfg.patchValues.AmazmeSparkToleration[teamId], cfg.featureFlag.Affinity.HardPatch)...)
+	if cfg.FeatureList.Affinity.Enabled && cfg.FeatureList.Toleration.Enabled {
+		result = append(result, addAffinity(sparkApp, cfg.SparkPatchValue.AmazmeSparkAffinity[teamId], cfg.FeatureList.Affinity.HardPatch)...)
+		result = append(result, addToleration(sparkApp, cfg.SparkPatchValue.AmazmeSparkToleration[teamId], cfg.FeatureList.Affinity.HardPatch)...)
 		slog.Info("Add node selector rules")
 	}
 

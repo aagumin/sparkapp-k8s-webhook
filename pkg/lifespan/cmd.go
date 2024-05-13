@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"gitlab.amazmetest.ru/ml/spark-amazme-webhook/pkg/mutating"
+	"log"
 	"log/slog"
 	"os"
+	"strings"
 )
 
 var (
@@ -18,16 +20,14 @@ var (
 var longDesc = `Example showing how to implement a basic mutating webhook in Kubernetes.
 
 Example:
-$ mutating-webhook --tls-cert <tls_cert> --tls-key <tls_key> --port <port>`
+$ mutating-webhook --tls-cert <tls_cert> --tls-key <tls_key> --port <port> --cfgPath <cfgPath>`
 
 var rootCmd = &cobra.Command{
 	Use:   "mutating-webhook",
 	Short: "Kubernetes mutating webhook example",
 	Long:  longDesc,
 	Run: func(cmd *cobra.Command, args []string) {
-		logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
-		slog.SetDefault(logger)
-
+		logger := initLogger()
 		var (
 			cfg mutating.SparkAppConfig
 			wh  mutating.WebHook
@@ -38,9 +38,11 @@ var rootCmd = &cobra.Command{
 			slog.Warn("")
 		}
 
-		cfg.GetConf(cfgPath)
-		wh = mutating.WebHook(cfg)
-		wh.RunWebhookServer(tlsCert, tlsKey, port)
+		// xz
+		cfg = mutating.GetConf(cfgPath)
+		wh = mutating.WebHook{&cfg}
+		slog.Info("Success reading config")
+		wh.RunWebhookServer(tlsCert, tlsKey, port, logger)
 	},
 }
 
@@ -51,5 +53,26 @@ func Execute() {
 func init() {
 	rootCmd.Flags().StringVar(&tlsCert, "tls-cert", "", "Certificate for TLS")
 	rootCmd.Flags().StringVar(&tlsKey, "tls-key", "", "Private key file for TLS")
-	rootCmd.Flags().IntVar(&port, "port", 443, "Port to listen on for HTTPS traffic")
+	rootCmd.Flags().UintVar(&port, "port", 443, "Port to listen on for HTTPS traffic")
+	rootCmd.Flags().StringVar(&cfgPath, "cfgPath", "", "Path to spark mutating config file")
+}
+
+func initLogger() *log.Logger {
+	var logLevel slog.Level
+	var logLevelValue string
+	logLevelValue = strings.ToUpper(os.Getenv("LOG_LEVEL"))
+	if logLevelValue == "" || logLevelValue == "INFO" {
+		logLevel = slog.LevelInfo
+	} else if logLevelValue == "DEBUG" {
+		logLevel = slog.LevelDebug
+	} else {
+		logLevel = slog.LevelError
+	}
+
+	opts := &slog.HandlerOptions{
+		Level: logLevel,
+	}
+	logger := slog.NewLogLogger(slog.NewJSONHandler(os.Stdout, nil), logLevel)
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, opts)))
+	return logger
 }
