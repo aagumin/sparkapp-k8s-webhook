@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "spark-amazme-mwh.fullname" . }}
+  labels:
+    {{- include "spark-amazme-mwh.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "spark-amazme-mwh.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/mutating.yaml") . | sha256sum }}
+      {{- if .Values.metrics.enable }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.metrics.port }}"
+        prometheus.io/path: {{ .Values.metrics.endpoint }}
+      {{- end }}
+      {{- if .Values.podAnnotations }}
+        {{- toYaml .Values.podAnnotations | trim | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "spark-amazme-mwh.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          command:
+            - "uvicorn"
+            - "asmwh.app:app"
+            - "--host"
+            - "0.0.0.0"
+            - "--port"
+            - {{ .Values.service.port  | toString | quote }}
+            - "--ssl-keyfile=/etc/certs/tls.key"
+            - "--ssl-certfile=/etc/certs/tls.crt"
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: {{ .Values.service.protocol }}
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{.Values.livenessProbePath}}
+              port: {{ .Values.service.port }}
+              scheme: HTTPS
+          readinessProbe:
+            httpGet:
+              path: {{.Values.readinessProbePath}}
+              port: {{ .Values.service.port }}
+              scheme: HTTPS
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/certs
+              name: cert
+              readOnly: true
+            - name: config
+              mountPath: /etc/configs
+              readOnly: true
+          env: {{- toYaml .Values.containerEnv | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: cert
+          secret:
+            secretName: {{ include "spark-amazme-mwh.fullname" . }}-certs
+        - name: config
+          configMap:
+            name: {{ .Values.appConfig.spark.configMapName }}

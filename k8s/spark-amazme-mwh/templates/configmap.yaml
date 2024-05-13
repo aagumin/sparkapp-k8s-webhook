@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.appConfig.spark.configMapName }}
+data:
+  spark.yaml: |-
+{{ .Values.appConfig.spark.configMapValue | nindent 4 }}

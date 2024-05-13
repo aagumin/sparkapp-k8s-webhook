@@ -1,0 +1,53 @@
+{{- $ca := genCA .Release.Name 3650 }}
+{{- $cn := .Release.Name }}
+{{- $dns1 := printf "%s.%s" $cn .Release.Namespace }}
+{{- $dns2 := printf "%s.%s.svc" $cn .Release.Namespace }}
+{{- $cert := genSignedCert $cn nil (list $dns1 $dns2) 3650 $ca }}
+
+
+
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ include "spark-amazme-mwh.fullname" . }}-webhook
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ include "spark-amazme-mwh.fullname" . }}
+webhooks:
+  - name: "{{ include "spark-amazme-mwh.fullname" . }}.amazme.ru"
+    clientConfig:
+      service:
+        name: {{ include "spark-amazme-mwh.fullname" . }}
+        namespace: {{ .Release.Namespace }}
+        path: {{ .Values.mutate.mutateUrl }}
+        port: {{ .Values.service.port }}
+      caBundle: {{ $ca.Cert | b64enc | quote }}
+    rules:
+      - apiGroups: {{ toYaml .Values.mutate.apiGroups | nindent 10 }}
+        apiVersions: {{ toYaml .Values.mutate.apiVersions | nindent 10 }}
+        operations: {{ toYaml .Values.mutate.operations | nindent 10 }}
+        resources: {{ toYaml .Values.mutate.resources | nindent 10 }}
+        scope: {{ .Values.mutate.scope }}
+    admissionReviewVersions: ["v1", "v1beta1"]
+    sideEffects: {{ .Values.mutate.sideEffects }}
+    timeoutSeconds: {{ .Values.mutate.timeoutSeconds }}
+    objectSelector:
+      {{- with .Values.mutate.objectSelector.matchExpressions }}
+      matchExpressions:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: "{{ include "spark-amazme-mwh.fullname" . }}-certs"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ include "spark-amazme-mwh.fullname" . }}
+    paas/component: {{ include "spark-amazme-mwh.fullname" . }}
+type: kubernetes.io/tls
+data:
+  tls.crt: {{ $cert.Cert | b64enc | quote }}
+  tls.key: {{ $cert.Key | b64enc | quote }}
+  ca.crt: {{ $ca.Cert | b64enc | quote }}
