@@ -22,7 +22,7 @@ func (wh *WebHook) serveHealth(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 	_, err := fmt.Fprint(w, "Ok")
 	if err != nil {
-		slog.Info("Health success", w.Header().Get("Status"))
+		slog.Info("Health success")
 		return
 	}
 }
@@ -37,7 +37,7 @@ func (wh *WebHook) mutateReview(w http.ResponseWriter, r *http.Request) {
 	var sparkApp *v1beta2.SparkApplication
 
 	admReview, err := parseAdmRequest(*r)
-	slog.Debug("Successfully parsed adm review request", admReview)
+	slog.Debug(fmt.Sprintf("Successfully parsed adm review request %s", admReview))
 	if err != nil {
 		errS := err.Error()
 		slog.Error(errS)
@@ -46,7 +46,7 @@ func (wh *WebHook) mutateReview(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sparkApp, err = parseSparkApp(*admReview)
-	slog.Debug("Successfully parsed sparkApp from adm request", sparkApp)
+	slog.Debug(fmt.Sprintf("Successfully parsed sparkApp from adm request"))
 
 	if err != nil {
 		errS := err.Error()
@@ -56,7 +56,7 @@ func (wh *WebHook) mutateReview(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sparkAppPatches := mutateSparkApplication(sparkApp, wh.MutateConfig)
-	slog.Debug("Successfully patch spark app", sparkAppPatches)
+	slog.Debug(fmt.Sprintf("Successfully patch spark app - %s", sparkAppPatches))
 
 	marshal, err := json.Marshal(sparkAppPatches)
 	if err != nil {
