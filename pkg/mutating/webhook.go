@@ -13,11 +13,20 @@ import (
 	"net/http"
 )
 
+// WebHook represents a webhook server for mutating SparkApplication objects.
 type WebHook struct {
 	MutateConfig *SparkAppConfig
-	//errLog       slog.Logger
 }
 
+// serveHealth serves the "/health" endpoint, which returns a 204 No Content status code and the string "Ok".
+// It is used to indicate that the webhook server is running and healthy.
+//
+// Parameters:
+//   - w: The http.ResponseWriter to which the response will be written.
+//   - r: The http.Request that triggered the webhook server to serve the "/health" endpoint.
+//
+// Returns:
+//   - nil if the "/health" endpoint is successfully served, otherwise an error.
 func (wh *WebHook) serveHealth(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 	_, err := fmt.Fprint(w, "Ok")
@@ -27,6 +36,15 @@ func (wh *WebHook) serveHealth(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// mutateReview handles the "/mutate" endpoint, which mutates the provided SparkApplication object according to the MutateConfig.
+// It returns a JSON-encoded AdmissionResponse containing the patched SparkApplication object.
+//
+// Parameters:
+//   - w: The http.ResponseWriter to which the response will be written.
+//   - r: The http.Request that triggered the webhook server to serve the "/mutate" endpoint.
+//
+// Returns:
+//   - nil if the "/mutate" endpoint is successfully served, otherwise an error.
 func (wh *WebHook) mutateReview(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		err := errors.New("http method doesnt support, try `POST`")
@@ -94,6 +112,18 @@ func (wh *WebHook) mutateReview(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// RunWebhookServer starts a webhook server that listens on the specified port and serves the "/health" and "/mutate" endpoints.
+// It uses the provided TLS certificates for secure communication.
+// The server's error log is set to the provided logger.
+//
+// Parameters:
+//   - certFile: The path to the TLS certificate file.
+//   - keyFile: The path to the TLS key file.
+//   - port: The port number on which the server should listen.
+//   - logger: The logger to use for the server's error log.
+//
+// Returns:
+//   - nil if the server starts successfully, otherwise an error.
 func (wh *WebHook) RunWebhookServer(certFile, keyFile string, port uint, logger *log.Logger) {
 	cert, err := tls.LoadX509KeyPair(certFile, keyFile)
 	if err != nil {
