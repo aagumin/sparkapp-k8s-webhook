@@ -1,4 +1,4 @@
-package mutating
+package webhook
 
 import (
 	"crypto/tls"
@@ -13,7 +13,7 @@ import (
 	"net/http"
 )
 
-// WebHook represents a webhook server for mutating SparkApplication objects.
+// WebHook represents a webhook server for webhook SparkApplication objects.
 type WebHook struct {
 	MutateConfig *SparkAppConfig
 }

@@ -1,4 +1,4 @@
-package mutating
+package webhook
 
 import (
 	"github.com/GoogleCloudPlatform/spark-on-k8s-operator/pkg/apis/sparkoperator.k8s.io/v1beta2"
@@ -6,7 +6,7 @@ import (
 )
 
 func mutateSparkApplication(sparkApp *v1beta2.SparkApplication, cfg *SparkAppConfig) []patchOperation {
-	// all mutating
+	// all webhook
 	var result []patchOperation
 
 	annotations := sparkApp.Annotations

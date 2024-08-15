@@ -1,9 +1,9 @@
 package main
 
 import (
-	"gitlab.amazmetest.ru/ml/spark-amazme-webhook/pkg/lifespan"
+	"gitlab.amazmetest.ru/ml/spark-amazme-webhook/pkg/webhook"
 )
 
 func main() {
-	lifespan.Execute()
+	webhook.Execute()
 }

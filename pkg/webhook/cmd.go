@@ -1,9 +1,8 @@
-package lifespan
+package webhook
 
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"gitlab.amazmetest.ru/ml/spark-amazme-webhook/pkg/mutating"
 	"log"
 	"log/slog"
 	"os"
@@ -17,20 +16,20 @@ var (
 	cfgPath string
 )
 
-var longDesc = `Example showing how to implement a basic mutating webhook in Kubernetes.
+var longDesc = `Example showing how to implement a basic webhook webhook in Kubernetes.
 
 Example:
-$ mutating-webhook --tls-cert <tls_cert> --tls-key <tls_key> --port <port> --cfgPath <cfgPath>`
+$ webhook-webhook --tls-cert <tls_cert> --tls-key <tls_key> --port <port> --cfgPath <cfgPath>`
 
 var rootCmd = &cobra.Command{
-	Use:   "mutating-webhook",
-	Short: "Kubernetes mutating webhook example",
+	Use:   "webhook-webhook",
+	Short: "Kubernetes webhook webhook example",
 	Long:  longDesc,
 	Run: func(cmd *cobra.Command, args []string) {
 		logger := initLogger()
 		var (
-			cfg mutating.SparkAppConfig
-			wh  mutating.WebHook
+			cfg SparkAppConfig
+			wh  WebHook
 		)
 
 		if tlsCert == "" || tlsKey == "" {
@@ -39,8 +38,8 @@ var rootCmd = &cobra.Command{
 		}
 
 		// xz
-		cfg = mutating.GetConf(cfgPath)
-		wh = mutating.WebHook{MutateConfig: &cfg}
+		cfg = GetConf(cfgPath)
+		wh = WebHook{MutateConfig: &cfg}
 		slog.Info("Success reading config")
 		wh.RunWebhookServer(tlsCert, tlsKey, port, logger)
 	},
@@ -54,7 +53,7 @@ func init() {
 	rootCmd.Flags().StringVar(&tlsCert, "tls-cert", "", "Certificate for TLS")
 	rootCmd.Flags().StringVar(&tlsKey, "tls-key", "", "Private key file for TLS")
 	rootCmd.Flags().UintVar(&port, "port", 443, "Port to listen on for HTTPS traffic")
-	rootCmd.Flags().StringVar(&cfgPath, "cfgPath", "", "Path to spark mutating config file")
+	rootCmd.Flags().StringVar(&cfgPath, "cfgPath", "", "Path to spark webhook config file")
 }
 
 func initLogger() *log.Logger {

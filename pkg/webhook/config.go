@@ -1,4 +1,4 @@
-package mutating
+package webhook
 
 import (
 	"gopkg.in/yaml.v3"
