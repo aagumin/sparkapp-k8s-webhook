@@ -23,23 +23,23 @@ SparkPatchValue:
 
   AmazmeSparkAffinity:
     ml:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            -   matchExpressions:
-                  -   key: "app.kubernetes.io/component"
-                      operator: "In"
-                      values:
-                        - "spark"
+      nodeaffinity:
+        requiredduringschedulingignoredduringexecution:
+          nodeselectorterms:
+            - matchexpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - spark
 
   AmazmeSparkHistoryServerSpark:
     spark.eventLog.enabled: "true"
-    spark.eventLog.dir: "s3a://amazme-st/spark-events"
+    spark.eventLog.dir: "s3a://prod/spark-events"
     spark.eventLog.rolling.enabled: "true"
     spark.eventLog.rolling.maxFileSize: "128m"
 
   AmazmeSparkHistoryServerHadoop:
     fs.s3a.aws.credentials.provider: "com.amazonaws.auth.EnvironmentVariableCredentialsProvider"
-    fs.s3a.endpoint: "https://obs.ru-moscow-1.hc.sbercloud.ru"
+    fs.s3a.endpoint: "https://s3.magic.ru"
     fs.s3a.path.style.access: "true"
     fs.s3a.connection.ssl.enabled: "false"

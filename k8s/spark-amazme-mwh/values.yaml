@@ -21,6 +21,15 @@ securityContext:
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 10001
+  privileged: false
+  allowPrivilegeEscalation: false
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
 
 service:
   type: ClusterIP
@@ -38,12 +47,6 @@ resources:
     cpu: "2"
     memory: 2Gi
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
 
 nodeSelector: { }
 
@@ -90,35 +93,3 @@ containerEnv:
     value: INFO
   - name: SPARK_CFG_PATH
     value: /etc/configs/spark.yaml
-
-serviceAccount:
-  create: false
-  annotations: { }
-
-rbac:
-  createRole: false
-
-metrics:
-  # -- Enable prometheus metric scraping
-  enable: false
-  # -- Metrics port
-  port: 10254
-  # -- Metrics port name
-  portName: metrics
-  # -- Metrics serving endpoint
-  endpoint: /metrics
-  # -- Metric prefix, will be added to all exported metrics
-  prefix: ""
-
-# -- Prometheus pod monitor for operator's pod.
-podMonitor:
-  # -- If enabled, a pod monitor for operator's pod will be submitted. Note that prometheus metrics should be enabled as well.
-  enable: false
-  # -- Pod monitor labels
-  labels: { }
-  # -- The label to use to retrieve the job name from
-  jobLabel: spark-operator-podmonitor
-  # -- Prometheus metrics endpoint properties. `metrics.portName` will be used as a port
-  podMetricsEndpoint:
-    scheme: http
-    interval: 5s

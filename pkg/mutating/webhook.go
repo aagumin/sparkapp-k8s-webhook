@@ -64,7 +64,7 @@ func (wh *WebHook) mutateReview(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sparkApp, err = parseSparkApp(*admReview)
-	slog.Debug(fmt.Sprintf("Successfully parsed sparkApp from adm request"))
+	slog.Debug("Successfully parsed sparkApp from adm request")
 
 	if err != nil {
 		errS := err.Error()

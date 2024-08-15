@@ -14,7 +14,7 @@ type patchOperation struct {
 func addAffinity(sparkApp *v1beta2.SparkApplication, patchValue v1.Affinity, hardPatch bool) []patchOperation {
 	var patchOps []patchOperation
 
-	if &sparkApp.Spec.Driver.Affinity != nil && &sparkApp.Spec.Executor.Affinity != nil {
+	if sparkApp.Spec.Driver.Affinity != nil && sparkApp.Spec.Executor.Affinity != nil {
 		if hardPatch {
 
 			patchOps := append(patchOps, patchOperation{Op: "replace", Path: "/spec/driver/affinity", Value: patchValue})
@@ -36,7 +36,7 @@ func addAffinity(sparkApp *v1beta2.SparkApplication, patchValue v1.Affinity, har
 func addToleration(sparkApp *v1beta2.SparkApplication, patchValue []v1.Toleration, hardPatch bool) []patchOperation {
 	var patchOps []patchOperation
 
-	if &sparkApp.Spec.Driver.Tolerations != nil && &sparkApp.Spec.Executor.Tolerations != nil {
+	if sparkApp.Spec.Driver.Tolerations != nil && sparkApp.Spec.Executor.Tolerations != nil {
 		if hardPatch {
 
 			patchOps := append(patchOps, patchOperation{Op: "replace", Path: "/spec/driver/toleration", Value: patchValue})

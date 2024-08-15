@@ -40,7 +40,7 @@ var rootCmd = &cobra.Command{
 
 		// xz
 		cfg = mutating.GetConf(cfgPath)
-		wh = mutating.WebHook{&cfg}
+		wh = mutating.WebHook{MutateConfig: &cfg}
 		slog.Info("Success reading config")
 		wh.RunWebhookServer(tlsCert, tlsKey, port, logger)
 	},
@@ -59,13 +59,15 @@ func init() {
 
 func initLogger() *log.Logger {
 	var logLevel slog.Level
-	var logLevelValue string
-	logLevelValue = strings.ToUpper(os.Getenv("LOG_LEVEL"))
-	if logLevelValue == "" || logLevelValue == "INFO" {
+	logLevelValue := strings.ToUpper(os.Getenv("LOG_LEVEL"))
+	switch logLevelValue {
+	case "":
 		logLevel = slog.LevelInfo
-	} else if logLevelValue == "DEBUG" {
+	case "INFO":
+		logLevel = slog.LevelInfo
+	case "DEBUG":
 		logLevel = slog.LevelDebug
-	} else {
+	case "ERROR":
 		logLevel = slog.LevelError
 	}
 

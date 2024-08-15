@@ -15,11 +15,6 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/mutating.yaml") . | sha256sum }}
-      {{- if .Values.metrics.enable }}
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.metrics.port }}"
-        prometheus.io/path: {{ .Values.metrics.endpoint }}
-      {{- end }}
       {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | trim | nindent 8 }}
       {{- end }}
@@ -86,7 +81,9 @@ spec:
       volumes:
         - name: cert
           secret:
+            defaultMode:  256
             secretName: {{ include "spark-amazme-mwh.fullname" . }}-certs
         - name: config
           configMap:
+            defaultMode:  256
             name: {{ .Values.appConfig.spark.configMapName }}

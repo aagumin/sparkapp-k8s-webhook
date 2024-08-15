@@ -21,8 +21,8 @@ type FeatureMode struct {
 
 type SparkPatchValue struct {
 	// "ml":Affinity
-	AmazmeSparkToleration          map[string][]v1.Toleration `yaml:"AmazmeSparkToleration"`
 	AmazmeSparkAffinity            map[string]v1.Affinity     `yaml:"AmazmeSparkAffinity"`
+	AmazmeSparkToleration          map[string][]v1.Toleration `yaml:"AmazmeSparkToleration"`
 	AmazmeSparkHistoryServerSpark  map[string]string          `yaml:"AmazmeSparkHistoryServerSpark"`
 	AmazmeSparkHistoryServerHadoop map[string]string          `yaml:"AmazmeSparkHistoryServerHadoop"`
 	AmazmeSparkLabels              map[string]string          `yaml:"AmazmeSparkLabels"`
