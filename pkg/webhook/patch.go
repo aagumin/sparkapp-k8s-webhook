@@ -1,7 +1,7 @@
 package webhook
 
 import (
-	"github.com/GoogleCloudPlatform/spark-on-k8s-operator/pkg/apis/sparkoperator.k8s.io/v1beta2"
+	"github.com/kubeflow/spark-operator/api/v1beta2"
 	v1 "k8s.io/api/core/v1"
 )
 
