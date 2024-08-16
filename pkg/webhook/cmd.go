@@ -37,8 +37,10 @@ var rootCmd = &cobra.Command{
 			slog.Warn("")
 		}
 
-		// xz
-		cfg = GetConf(cfgPath)
+		cfg, err := GetConf(cfgPath)
+		if err != nil {
+			panic(err)
+		}
 		wh = WebHook{MutateConfig: &cfg}
 		slog.Info("Success reading config")
 		wh.RunWebhookServer(tlsCert, tlsKey, port, logger)

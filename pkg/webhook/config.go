@@ -33,16 +33,18 @@ type SparkAppConfig struct {
 	SparkPatchValue SparkPatchValue `yaml:"SparkPatchValue"`
 }
 
-func GetConf(path string) SparkAppConfig {
+func GetConf(path string) (SparkAppConfig, error) {
 	var fl *SparkAppConfig
 	in, err := os.ReadFile(path)
 	if err != nil {
 		log.Fatalf("error: %v", err)
+		return *fl, err
 	}
 
 	err = yaml.Unmarshal(in, &fl)
 	if err != nil {
 		log.Fatalf("error: %v", err)
+		return *fl, err
 	}
-	return *fl
+	return *fl, nil
 }

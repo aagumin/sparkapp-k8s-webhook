@@ -3,6 +3,7 @@ module gitlab.amazmetest.ru/ml/spark-amazme-webhook
 go 1.22.5
 
 require (
+	github.com/golang/mock v1.6.0
 	github.com/kubeflow/spark-operator v0.0.0-20240814024926-5972482ca4db
 	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.9.0
