@@ -9,7 +9,10 @@ RUN go test -v
 
 RUN CGO_ENABLED=0 go build -o /go/bin/app
 
-FROM gcr.io/distroless/static-debian11
+FROM gcr.io/distroless/static-debian11:nonroot
 
 COPY --from=build /go/bin/app /
+
+USER 10001
+
 CMD ["/app"]

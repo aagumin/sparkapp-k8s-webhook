@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "spark-amazme-mwh.fullname" . }}
+  name: {{ include "awesome-webhook.fullname" . }}
   labels:
-    {{- include "spark-amazme-mwh.labels" . | nindent 4 }}
+    {{- include "awesome-webhook.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "spark-amazme-mwh.selectorLabels" . | nindent 6 }}
+      {{- include "awesome-webhook.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -19,7 +19,7 @@ spec:
         {{- toYaml .Values.podAnnotations | trim | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "spark-amazme-mwh.selectorLabels" . | nindent 8 }}
+        {{- include "awesome-webhook.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -29,15 +29,12 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          command:
-            - "uvicorn"
-            - "asmwh.app:app"
-            - "--host"
-            - "0.0.0.0"
+          args:
             - "--port"
             - {{ .Values.service.port  | toString | quote }}
-            - "--ssl-keyfile=/etc/certs/tls.key"
-            - "--ssl-certfile=/etc/certs/tls.crt"
+            - "--tls-key =/etc/certs/tls.key"
+            - "--tls-cert=/etc/certs/tls.crt"
+            - "--cfgPath=/etc/configs/spark.yaml"
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -82,7 +79,7 @@ spec:
         - name: cert
           secret:
             defaultMode:  256
-            secretName: {{ include "spark-amazme-mwh.fullname" . }}-certs
+            secretName: {{ include "awesome-webhook.fullname" . }}-certs
         - name: config
           configMap:
             defaultMode:  256

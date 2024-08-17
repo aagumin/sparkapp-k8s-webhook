@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "spark-amazme-mwh.fullname" . }}
+  name: {{ include "awesome-webhook.fullname" . }}
   labels:
-    {{- include "spark-amazme-mwh.labels" . | nindent 4 }}
+    {{- include "awesome-webhook.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "spark-amazme-mwh.fullname" . }}
+    name: {{ include "awesome-webhook.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

@@ -5,7 +5,7 @@ curl -X POST --location "https://localhost:443/mutate" \
           "kind": "AdmissionReview",
           "apiVersion": "admission.k8s.io/v1",
           "request": {
-            "uid": "d8aaf0a1-db2f-4b7d-b5b1-0e627e2d1229",
+            "uid": "d8aaf0a1-db2f-4b7d-b5ds-0e627ecx1229",
             "kind": {
               "group": "sparkoperator.k8s.io",
               "version": "v1beta2",
@@ -30,9 +30,9 @@ curl -X POST --location "https://localhost:443/mutate" \
             "namespace": "seldon",
             "operation": "CREATE",
             "userInfo": {
-              "username": "12bee1de8b0026de1facc00264f6893d",
+              "username": "12b120026de1facc00264f6893d",
               "groups": [
-                "0f2762d3df0025dd3f71c00207c49c39",
+                "0f2762d3dsf00207c49c39",
                 "system:authenticated"
               ]
             },
@@ -41,9 +41,9 @@ curl -X POST --location "https://localhost:443/mutate" \
               "kind": "SparkApplication",
               "metadata": {
                 "annotations": {
-                  "amazme.spark.app": "ml",
-                  "amazme.webhook.jobType": "batch",
-                  "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"sparkoperator.k8s.io/v1beta2\",\"kind\":\"SparkApplication\",\"metadata\":{\"annotations\":{\"amazme.spark.app\":\"ml\",\"amazme.webhook.jobType\":\"batch\"},\"name\":\"spark-pi-test-hook-21\",\"namespace\":\"seldon\"},\"spec\":{\"deps\":{\"packages\":[\"org.apache.hadoop:hadoop-aws:3.2.4\"]},\"driver\":{\"coreLimit\":\"1200m\",\"cores\":1,\"env\":[{\"name\":\"AWS_ACCESS_KEY_ID\",\"value\":\"xxxx\"},{\"name\":\"AWS_SECRET_ACCESS_KEY\",\"value\":\"xxx\"},{\"name\":\"KAFKA_USER\",\"value\":\"amazme-sasl\"},{\"name\":\"KAFKA_PASSWORD\",\"value\":\"ccccccccc\"}],\"javaOptions\":\"-Divy.cache.dir=/tmp -Divy.home=/tmp\",\"labels\":{\"version\":\"3.1.1\"},\"memory\":\"512m\",\"serviceAccount\":\"spark\",\"volumeMounts\":[{\"mountPath\":\"/tmp\",\"name\":\"test-volume\"}]},\"executor\":{\"cores\":1,\"env\":[{\"name\":\"AWS_ACCESS_KEY_ID\",\"value\":\"xxxxx\"},{\"name\":\"AWS_SECRET_ACCESS_KEY\",\"value\":\"xxxxx\"},{\"name\":\"KAFKA_USER\",\"value\":\"amazme-sasl\"},{\"name\":\"KAFKA_PASSWORD\",\"value\":\"xxxxxx\"}],\"instances\":1,\"labels\":{\"version\":\"3.1.1\"},\"memory\":\"512m\",\"volumeMounts\":[{\"mountPath\":\"/tmp\",\"name\":\"test-volume\"}]},\"image\":\"spark-3.2.4-0.0.3a\",\"imagePullPolicy\":\"Always\",\"mainApplicationFile\":\"local:///opt/spark/examples/jars/spark-examples_2.12-3.2.4.jar\",\"mainClass\":\"org.apache.spark.examples.SparkPi\",\"mode\":\"cluster\",\"restartPolicy\":{\"type\":\"Never\"},\"sparkConf\":{\"javaOptions\":\"-Divy.cache.dir=/tmp -Divy.home=/tmp\",\"spark.serializer\":\"org.apache.spark.serializer.KryoSerializer\"},\"sparkVersion\":\"3.2.4\",\"type\":\"Scala\",\"volumes\":[{\"hostPath\":{\"path\":\"/tmp\",\"type\":\"Directory\"},\"name\":\"test-volume\"}]}}\n"
+                  "exmaple.spark.app": "ml",
+                  "exmaple.webhook.jobType": "batch",
+                  "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"sparkoperator.k8s.io/v1beta2\",\"kind\":\"SparkApplication\",\"metadata\":{\"annotations\":{\"exmaple.spark.app\":\"ml\",\"exmaple.webhook.jobType\":\"batch\"},\"name\":\"spark-pi-test-hook-21\",\"namespace\":\"seldon\"},\"spec\":{\"deps\":{\"packages\":[\"org.apache.hadoop:hadoop-aws:3.2.4\"]},\"driver\":{\"coreLimit\":\"1200m\",\"cores\":1,\"env\":[{\"name\":\"AWS_ACCESS_KEY_ID\",\"value\":\"xxxx\"},{\"name\":\"AWS_SECRET_ACCESS_KEY\",\"value\":\"xxx\"},{\"name\":\"KAFKA_USER\",\"value\":\"exmaple-sasl\"},{\"name\":\"KAFKA_PASSWORD\",\"value\":\"ccccccccc\"}],\"javaOptions\":\"-Divy.cache.dir=/tmp -Divy.home=/tmp\",\"labels\":{\"version\":\"3.1.1\"},\"memory\":\"512m\",\"serviceAccount\":\"spark\",\"volumeMounts\":[{\"mountPath\":\"/tmp\",\"name\":\"test-volume\"}]},\"executor\":{\"cores\":1,\"env\":[{\"name\":\"AWS_ACCESS_KEY_ID\",\"value\":\"xxxxx\"},{\"name\":\"AWS_SECRET_ACCESS_KEY\",\"value\":\"xxxxx\"},{\"name\":\"KAFKA_USER\",\"value\":\"exmaple-sasl\"},{\"name\":\"KAFKA_PASSWORD\",\"value\":\"xxxxxx\"}],\"instances\":1,\"labels\":{\"version\":\"3.1.1\"},\"memory\":\"512m\",\"volumeMounts\":[{\"mountPath\":\"/tmp\",\"name\":\"test-volume\"}]},\"image\":\"spark-3.2.4-0.0.3a\",\"imagePullPolicy\":\"Always\",\"mainApplicationFile\":\"local:///opt/spark/examples/jars/spark-examples_2.12-3.2.4.jar\",\"mainClass\":\"org.apache.spark.examples.SparkPi\",\"mode\":\"cluster\",\"restartPolicy\":{\"type\":\"Never\"},\"sparkConf\":{\"javaOptions\":\"-Divy.cache.dir=/tmp -Divy.home=/tmp\",\"spark.serializer\":\"org.apache.spark.serializer.KryoSerializer\"},\"sparkVersion\":\"3.2.4\",\"type\":\"Scala\",\"volumes\":[{\"hostPath\":{\"path\":\"/tmp\",\"type\":\"Directory\"},\"name\":\"test-volume\"}]}}\n"
                 },
                 "creationTimestamp": null,
                 "managedFields": [
@@ -54,8 +54,8 @@ curl -X POST --location "https://localhost:443/mutate" \
                       "f:metadata": {
                         "f:annotations": {
                           ".": {},
-                          "f:amazme.spark.app": {},
-                          "f:amazme.webhook.jobType": {},
+                          "f:exmaple.spark.app": {},
+                          "f:exmaple.webhook.jobType": {},
                           "f:kubectl.kubernetes.io/last-applied-configuration": {}
                         }
                       },
@@ -130,19 +130,19 @@ curl -X POST --location "https://localhost:443/mutate" \
                   "env": [
                     {
                       "name": "AWS_ACCESS_KEY_ID",
-                      "value": "OO5I9VZRL0JU4H0Y2DPD"
+                      "value": "xxxx"
                     },
                     {
                       "name": "AWS_SECRET_ACCESS_KEY",
-                      "value": "CdkTvMzCAjzKOyNXCyPHW7HY3rlFI2vEGYhRd2R3"
+                      "value": "xxxx"
                     },
                     {
                       "name": "KAFKA_USER",
-                      "value": "amazme-sasl"
+                      "value": "exmaple-sasl"
                     },
                     {
                       "name": "KAFKA_PASSWORD",
-                      "value": "cj+KUJ-RDyU_u4Hz"
+                      "value": "xxxxxx"
                     }
                   ],
                   "javaOptions": "-Divy.cache.dir=/tmp -Divy.home=/tmp",
@@ -171,7 +171,7 @@ curl -X POST --location "https://localhost:443/mutate" \
                     },
                     {
                       "name": "KAFKA_USER",
-                      "value": "amazme-sasl"
+                      "value": "exmaple-sasl"
                     },
                     {
                       "name": "KAFKA_PASSWORD",

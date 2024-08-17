@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "spark-amazme-mwh.fullname" . }}
+  name: {{ include "awesome-webhook.fullname" . }}
   labels:
-    {{- include "spark-amazme-mwh.labels" . | nindent 4 }}
+    {{- include "awesome-webhook.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -11,4 +11,4 @@ spec:
       protocol: TCP
       name: {{ .Values.service.protocol }}
   selector:
-    {{- include "spark-amazme-mwh.selectorLabels" . | nindent 4 }}
+    {{- include "awesome-webhook.selectorLabels" . | nindent 4 }}
