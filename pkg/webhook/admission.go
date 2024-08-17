@@ -49,7 +49,7 @@ func parseSparkApp(review v1.AdmissionReview) (*v1beta2.SparkApplication, error)
 		return nil, fmt.Errorf("AdmissionReview has no object")
 	}
 	if err := json.Unmarshal(review.Request.Object.Raw, &app); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal a SparkApplication from the raw data in the admission request: %v", err)
+		return nil, fmt.Errorf("Failed to unmarshal a SparkApplication from the raw data in the admission request: %v", err)
 	}
 	if app.GroupVersionKind().Group != v1beta2.Group {
 		return nil, fmt.Errorf("Non SparkApplication in object")

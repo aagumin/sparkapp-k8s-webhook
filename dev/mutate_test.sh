@@ -41,9 +41,9 @@ curl -X POST --location "https://localhost:443/mutate" \
               "kind": "SparkApplication",
               "metadata": {
                 "annotations": {
-                  "exmaple.spark.app": "ml",
-                  "exmaple.webhook.jobType": "batch",
-                  "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"sparkoperator.k8s.io/v1beta2\",\"kind\":\"SparkApplication\",\"metadata\":{\"annotations\":{\"exmaple.spark.app\":\"ml\",\"exmaple.webhook.jobType\":\"batch\"},\"name\":\"spark-pi-test-hook-21\",\"namespace\":\"seldon\"},\"spec\":{\"deps\":{\"packages\":[\"org.apache.hadoop:hadoop-aws:3.2.4\"]},\"driver\":{\"coreLimit\":\"1200m\",\"cores\":1,\"env\":[{\"name\":\"AWS_ACCESS_KEY_ID\",\"value\":\"xxxx\"},{\"name\":\"AWS_SECRET_ACCESS_KEY\",\"value\":\"xxx\"},{\"name\":\"KAFKA_USER\",\"value\":\"exmaple-sasl\"},{\"name\":\"KAFKA_PASSWORD\",\"value\":\"ccccccccc\"}],\"javaOptions\":\"-Divy.cache.dir=/tmp -Divy.home=/tmp\",\"labels\":{\"version\":\"3.1.1\"},\"memory\":\"512m\",\"serviceAccount\":\"spark\",\"volumeMounts\":[{\"mountPath\":\"/tmp\",\"name\":\"test-volume\"}]},\"executor\":{\"cores\":1,\"env\":[{\"name\":\"AWS_ACCESS_KEY_ID\",\"value\":\"xxxxx\"},{\"name\":\"AWS_SECRET_ACCESS_KEY\",\"value\":\"xxxxx\"},{\"name\":\"KAFKA_USER\",\"value\":\"exmaple-sasl\"},{\"name\":\"KAFKA_PASSWORD\",\"value\":\"xxxxxx\"}],\"instances\":1,\"labels\":{\"version\":\"3.1.1\"},\"memory\":\"512m\",\"volumeMounts\":[{\"mountPath\":\"/tmp\",\"name\":\"test-volume\"}]},\"image\":\"spark-3.2.4-0.0.3a\",\"imagePullPolicy\":\"Always\",\"mainApplicationFile\":\"local:///opt/spark/examples/jars/spark-examples_2.12-3.2.4.jar\",\"mainClass\":\"org.apache.spark.examples.SparkPi\",\"mode\":\"cluster\",\"restartPolicy\":{\"type\":\"Never\"},\"sparkConf\":{\"javaOptions\":\"-Divy.cache.dir=/tmp -Divy.home=/tmp\",\"spark.serializer\":\"org.apache.spark.serializer.KryoSerializer\"},\"sparkVersion\":\"3.2.4\",\"type\":\"Scala\",\"volumes\":[{\"hostPath\":{\"path\":\"/tmp\",\"type\":\"Directory\"},\"name\":\"test-volume\"}]}}\n"
+                  "example.spark.app": "ml",
+                  "example.webhook.jobType": "batch",
+                  "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"sparkoperator.k8s.io/v1beta2\",\"kind\":\"SparkApplication\",\"metadata\":{\"annotations\":{\"example.spark.app\":\"ml\",\"example.webhook.jobType\":\"batch\"},\"name\":\"spark-pi-test-hook-21\",\"namespace\":\"seldon\"},\"spec\":{\"deps\":{\"packages\":[\"org.apache.hadoop:hadoop-aws:3.2.4\"]},\"driver\":{\"coreLimit\":\"1200m\",\"cores\":1,\"env\":[{\"name\":\"AWS_ACCESS_KEY_ID\",\"value\":\"xxxx\"},{\"name\":\"AWS_SECRET_ACCESS_KEY\",\"value\":\"xxx\"},{\"name\":\"KAFKA_USER\",\"value\":\"example-sasl\"},{\"name\":\"KAFKA_PASSWORD\",\"value\":\"ccccccccc\"}],\"javaOptions\":\"-Divy.cache.dir=/tmp -Divy.home=/tmp\",\"labels\":{\"version\":\"3.1.1\"},\"memory\":\"512m\",\"serviceAccount\":\"spark\",\"volumeMounts\":[{\"mountPath\":\"/tmp\",\"name\":\"test-volume\"}]},\"executor\":{\"cores\":1,\"env\":[{\"name\":\"AWS_ACCESS_KEY_ID\",\"value\":\"xxxxx\"},{\"name\":\"AWS_SECRET_ACCESS_KEY\",\"value\":\"xxxxx\"},{\"name\":\"KAFKA_USER\",\"value\":\"example-sasl\"},{\"name\":\"KAFKA_PASSWORD\",\"value\":\"xxxxxx\"}],\"instances\":1,\"labels\":{\"version\":\"3.1.1\"},\"memory\":\"512m\",\"volumeMounts\":[{\"mountPath\":\"/tmp\",\"name\":\"test-volume\"}]},\"image\":\"spark-3.2.4-0.0.3a\",\"imagePullPolicy\":\"Always\",\"mainApplicationFile\":\"local:///opt/spark/examples/jars/spark-examples_2.12-3.2.4.jar\",\"mainClass\":\"org.apache.spark.examples.SparkPi\",\"mode\":\"cluster\",\"restartPolicy\":{\"type\":\"Never\"},\"sparkConf\":{\"javaOptions\":\"-Divy.cache.dir=/tmp -Divy.home=/tmp\",\"spark.serializer\":\"org.apache.spark.serializer.KryoSerializer\"},\"sparkVersion\":\"3.2.4\",\"type\":\"Scala\",\"volumes\":[{\"hostPath\":{\"path\":\"/tmp\",\"type\":\"Directory\"},\"name\":\"test-volume\"}]}}\n"
                 },
                 "creationTimestamp": null,
                 "managedFields": [
@@ -54,8 +54,8 @@ curl -X POST --location "https://localhost:443/mutate" \
                       "f:metadata": {
                         "f:annotations": {
                           ".": {},
-                          "f:exmaple.spark.app": {},
-                          "f:exmaple.webhook.jobType": {},
+                          "f:example.spark.app": {},
+                          "f:example.webhook.jobType": {},
                           "f:kubectl.kubernetes.io/last-applied-configuration": {}
                         }
                       },
@@ -138,7 +138,7 @@ curl -X POST --location "https://localhost:443/mutate" \
                     },
                     {
                       "name": "KAFKA_USER",
-                      "value": "exmaple-sasl"
+                      "value": "example-sasl"
                     },
                     {
                       "name": "KAFKA_PASSWORD",
@@ -171,7 +171,7 @@ curl -X POST --location "https://localhost:443/mutate" \
                     },
                     {
                       "name": "KAFKA_USER",
-                      "value": "exmaple-sasl"
+                      "value": "example-sasl"
                     },
                     {
                       "name": "KAFKA_PASSWORD",

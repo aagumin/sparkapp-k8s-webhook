@@ -41,6 +41,7 @@ var rootCmd = &cobra.Command{
 		if err != nil {
 			panic(err)
 		}
+		slog.Debug("%+v\n", cfg)
 		wh = WebHook{MutateConfig: &cfg}
 		slog.Info("Success reading config")
 		wh.RunWebhookServer(tlsCert, tlsKey, port, logger)

@@ -3,6 +3,7 @@ package webhook
 import (
 	"github.com/kubeflow/spark-operator/api/v1beta2"
 	v1 "k8s.io/api/core/v1"
+	"log/slog"
 )
 
 type patchOperation struct {
@@ -19,16 +20,17 @@ func addAffinity(sparkApp *v1beta2.SparkApplication, patchValue v1.Affinity, har
 
 			patchOps := append(patchOps, patchOperation{Op: "replace", Path: "/spec/driver/affinity", Value: patchValue})
 			patchOps = append(patchOps, patchOperation{Op: "replace", Path: "/spec/executor/affinity", Value: patchValue})
-
+			slog.Debug("Adding affinity (hard)")
 			return patchOps
 		} else {
+			slog.Debug("Adding affinity (pass)")
 			return patchOps
 		}
 	}
 
 	patchOps = append(patchOps, patchOperation{Op: "add", Path: "/spec/driver/affinity", Value: patchValue})
 	patchOps = append(patchOps, patchOperation{Op: "add", Path: "/spec/executor/affinity", Value: patchValue})
-
+	slog.Debug("Adding affinity (soft)")
 	return patchOps
 
 }
@@ -41,16 +43,17 @@ func addToleration(sparkApp *v1beta2.SparkApplication, patchValue []v1.Toleratio
 
 			patchOps := append(patchOps, patchOperation{Op: "replace", Path: "/spec/driver/toleration", Value: patchValue})
 			patchOps = append(patchOps, patchOperation{Op: "replace", Path: "/spec/executor/toleration", Value: patchValue})
-
+			slog.Debug("Adding toleration (hard)")
 			return patchOps
 		} else {
+			slog.Debug("Adding toleration (pass)")
 			return patchOps
 		}
 	}
 
 	patchOps = append(patchOps, patchOperation{Op: "add", Path: "/spec/driver/toleration", Value: patchValue})
 	patchOps = append(patchOps, patchOperation{Op: "add", Path: "/spec/executor/toleration", Value: patchValue})
-
+	slog.Debug("Adding toleration (soft)")
 	return patchOps
 
 }
