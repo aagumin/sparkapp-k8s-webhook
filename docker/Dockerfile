@@ -15,4 +15,4 @@ COPY --from=build /go/bin/app /
 
 USER 10001
 
-CMD ["/app"]
+ENTRYPOINT "/app"

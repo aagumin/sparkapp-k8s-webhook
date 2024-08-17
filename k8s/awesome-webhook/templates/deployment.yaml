@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/webhook.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/mutating.yaml") . | sha256sum }}
       {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | trim | nindent 8 }}
       {{- end }}
@@ -29,10 +29,11 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          args:
+          command:
+            - "/app"
             - "--port"
             - {{ .Values.service.port  | toString | quote }}
-            - "--tls-key =/etc/certs/tls.key"
+            - "--tls-key=/etc/certs/tls.key"
             - "--tls-cert=/etc/certs/tls.crt"
             - "--cfgPath=/etc/configs/spark.yaml"
           securityContext:
@@ -78,9 +79,7 @@ spec:
       volumes:
         - name: cert
           secret:
-            defaultMode:  256
             secretName: {{ include "awesome-webhook.fullname" . }}-certs
         - name: config
           configMap:
-            defaultMode:  256
             name: {{ .Values.appConfig.spark.configMapName }}

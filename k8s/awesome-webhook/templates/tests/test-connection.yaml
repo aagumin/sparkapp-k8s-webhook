@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "awesome-webhook.fullname" . }}-test-connection"
+  name: "{{- include "awesome-webhook.fullname" . }}-test-connection"
   labels:
     {{- include "awesome-webhook.labels" . | nindent 4 }}
   annotations:

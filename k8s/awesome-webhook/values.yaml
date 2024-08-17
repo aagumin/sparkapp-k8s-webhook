@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: asm-webhook
+  repository: awesome-webhook
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 0.44
+  tag: 0.1.0
 
 imagePullSecrets: [ ]
 nameOverride: ""
@@ -78,7 +78,7 @@ mutate:
       - key: deploymentApiType
         operator: NotIn
         values: ["nrt_job"]
-      - key: amazme.webhook.status
+      - key: example.webhook.status
         operator: NotIn
         values: ["disable"]
 
@@ -86,7 +86,51 @@ mutate:
 appConfig:
   spark:
     configMapName: asmwebhook-configmap
-    configMapValue: ""
+    configMapValue: |
+      FeatureList:
+        Toleration:
+          enabled: True
+          hardPatch: True
+        Affinity:
+          enabled: True
+          hardPatch: True
+        HistoryServer:
+          enabled: True
+          hardPatch: True
+        PrometheusMonitoring:
+          enabled: True
+          hardPatch: True
+  
+      SparkPatchValue:
+        AmazmeSparkToleration:
+          ml:
+            - key: "app"
+              operator: "Equal"
+              value: "spark"
+              effect: "NoExecute"
+      
+        AmazmeSparkAffinity:
+          ml:
+            nodeaffinity:
+              requiredduringschedulingignoredduringexecution:
+                nodeselectorterms:
+                  - matchexpressions:
+                      - key: app.kubernetes.io/component
+                        operator: In
+                        values:
+                          - spark
+      
+        AmazmeSparkHistoryServerSpark:
+          spark.eventLog.enabled: "true"
+          spark.eventLog.dir: "s3a://prod/spark-events"
+          spark.eventLog.rolling.enabled: "true"
+          spark.eventLog.rolling.maxFileSize: "128m"
+      
+        AmazmeSparkHistoryServerHadoop:
+          fs.s3a.aws.credentials.provider: "com.amazonaws.auth.EnvironmentVariableCredentialsProvider"
+          fs.s3a.endpoint: "https://s3.magic.ru"
+          fs.s3a.path.style.access: "true"
+          fs.s3a.connection.ssl.enabled: "false" # TODO: remove this when we will fix it
 
 containerEnv:
   - name: LOG_LEVEL
