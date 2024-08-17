@@ -11,7 +11,7 @@ func mutateSparkApplication(sparkApp *v1beta2.SparkApplication, cfg *SparkAppCon
 
 	annotations := sparkApp.GetAnnotations()
 	teamId := annotations["example.spark.app"]
-	if teamId == "" {
+	if teamId == "" || annotations == nil {
 		slog.Debug("No teamId found in annotations, skipping affinity and toleration. Set `example.spark.app` annotations")
 		return result
 	}

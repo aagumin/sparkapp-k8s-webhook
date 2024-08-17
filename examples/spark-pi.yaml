@@ -17,6 +17,8 @@ apiVersion: sparkoperator.k8s.io/v1beta2
 kind: SparkApplication
 metadata:
   name: spark-pi
+  annotations:
+    example.spark.app: ml
 spec:
   type: Scala
   mode: cluster

@@ -88,10 +88,11 @@ func (wh *WebHook) mutateReview(w http.ResponseWriter, r *http.Request) {
 		Allowed:          true,
 		Result:           &status,
 		Patch:            marshal,
-		PatchType:        &patchType,
+		PatchType:        &patchType, // BUG!
 		AuditAnnotations: nil,
 		Warnings:         nil,
 	}
+	slog.Debug(fmt.Sprintf("Successfully marshaled admission response %s", admResp))
 
 	resp, err := json.Marshal(admResp)
 	if err != nil {
