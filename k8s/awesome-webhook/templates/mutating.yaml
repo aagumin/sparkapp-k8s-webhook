@@ -14,7 +14,7 @@ metadata:
   labels:
     app: {{ include "awesome-webhook.fullname" . }}
 webhooks:
-  - name: "{{ include "awesome-webhook.fullname" . }}.amazme.ru"
+  - name: "{{ include "awesome-webhook.fullname" . }}.company.ru"
     clientConfig:
       service:
         name: {{ include "awesome-webhook.fullname" . }}

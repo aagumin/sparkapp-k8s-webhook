@@ -102,14 +102,14 @@ appConfig:
           hardPatch: True
   
       SparkPatchValue:
-        AmazmeSparkToleration:
+        StandSparkToleration:
           ml:
             - key: "app"
               operator: "Equal"
               value: "spark"
               effect: "NoExecute"
       
-        AmazmeSparkAffinity:
+        StandSparkAffinity:
           ml:
             nodeaffinity:
               requiredduringschedulingignoredduringexecution:
@@ -120,13 +120,13 @@ appConfig:
                         values:
                           - spark
       
-        AmazmeSparkHistoryServerSpark:
+        StandSparkHistoryServerSpark:
           spark.eventLog.enabled: "true"
           spark.eventLog.dir: "s3a://prod/spark-events"
           spark.eventLog.rolling.enabled: "true"
           spark.eventLog.rolling.maxFileSize: "128m"
       
-        AmazmeSparkHistoryServerHadoop:
+        StandSparkHistoryServerHadoop:
           fs.s3a.aws.credentials.provider: "com.amazonaws.auth.EnvironmentVariableCredentialsProvider"
           fs.s3a.endpoint: "https://s3.magic.ru"
           fs.s3a.path.style.access: "true"
@@ -134,6 +134,6 @@ appConfig:
 
 containerEnv:
   - name: LOG_LEVEL
-    value: DEBUG
+    value: INFO
   - name: SPARK_CFG_PATH
     value: /etc/configs/spark.yaml

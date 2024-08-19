@@ -1,10 +1,11 @@
 package webhook
 
 import (
-	"gopkg.in/yaml.v3"
-	v1 "k8s.io/api/core/v1"
 	"log"
 	"os"
+
+	"gopkg.in/yaml.v3"
+	v1 "k8s.io/api/core/v1"
 )
 
 type FeatureList struct {
@@ -21,11 +22,11 @@ type FeatureMode struct {
 
 type SparkPatchValue struct {
 	// "ml":Affinity
-	AmazmeSparkAffinity            map[string]v1.Affinity     `yaml:"AmazmeSparkAffinity"`
-	AmazmeSparkToleration          map[string][]v1.Toleration `yaml:"AmazmeSparkToleration"`
-	AmazmeSparkHistoryServerSpark  map[string]string          `yaml:"AmazmeSparkHistoryServerSpark"`
-	AmazmeSparkHistoryServerHadoop map[string]string          `yaml:"AmazmeSparkHistoryServerHadoop"`
-	AmazmeSparkLabels              map[string]string          `yaml:"AmazmeSparkLabels"`
+	StandSparkAffinity            map[string]v1.Affinity     `yaml:"StandSparkAffinity"`
+	StandSparkToleration          map[string][]v1.Toleration `yaml:"StandSparkToleration"`
+	StandSparkHistoryServerSpark  map[string]string          `yaml:"StandSparkHistoryServerSpark"`
+	StandSparkHistoryServerHadoop map[string]string          `yaml:"StandSparkHistoryServerHadoop"`
+	StandSparkLabels              map[string]string          `yaml:"StandSparkLabels"`
 }
 
 type SparkAppConfig struct {

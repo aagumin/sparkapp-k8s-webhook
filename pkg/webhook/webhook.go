@@ -5,12 +5,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/kubeflow/spark-operator/api/v1beta2"
-	v1 "k8s.io/api/admission/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"log"
 	"log/slog"
 	"net/http"
+
+	"github.com/kubeflow/spark-operator/api/v1beta2"
+	v1 "k8s.io/api/admission/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // WebHook represents a webhook server for webhook SparkApplication objects.
@@ -138,7 +139,6 @@ func (wh *WebHook) RunWebhookServer(certFile, keyFile string, port uint, logger 
 	http.HandleFunc("/health", wh.serveHealth)
 	http.HandleFunc("/mutate", wh.mutateReview)
 	server := http.Server{
-
 		Addr: fmt.Sprintf(":%d", port),
 		TLSConfig: &tls.Config{
 			Certificates: []tls.Certificate{cert},

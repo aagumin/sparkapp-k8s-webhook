@@ -1,9 +1,10 @@
 package webhook
 
 import (
+	"log/slog"
+
 	"github.com/kubeflow/spark-operator/api/v1beta2"
 	v1 "k8s.io/api/core/v1"
-	"log/slog"
 )
 
 type patchOperation struct {
@@ -32,7 +33,6 @@ func addAffinity(sparkApp *v1beta2.SparkApplication, patchValue v1.Affinity, har
 	patchOps = append(patchOps, patchOperation{Op: "add", Path: "/spec/executor/affinity", Value: patchValue})
 	slog.Debug("Adding affinity (soft)")
 	return patchOps
-
 }
 
 func addToleration(sparkApp *v1beta2.SparkApplication, patchValue []v1.Toleration, hardPatch bool) []patchOperation {
@@ -55,5 +55,4 @@ func addToleration(sparkApp *v1beta2.SparkApplication, patchValue []v1.Toleratio
 	patchOps = append(patchOps, patchOperation{Op: "add", Path: "/spec/executor/toleration", Value: patchValue})
 	slog.Debug("Adding toleration (soft)")
 	return patchOps
-
 }

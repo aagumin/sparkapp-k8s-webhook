@@ -2,9 +2,10 @@ package webhook
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/kubeflow/spark-operator/api/v1beta2"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func Test_mutateSparkApplication(t *testing.T) {

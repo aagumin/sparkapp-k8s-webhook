@@ -2,11 +2,12 @@ package webhook
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"log"
 	"log/slog"
 	"os"
 	"strings"
+
+	"github.com/spf13/cobra"
 )
 
 var (

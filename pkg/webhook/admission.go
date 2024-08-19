@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/http"
+
 	"github.com/kubeflow/spark-operator/api/v1beta2"
 	v1 "k8s.io/api/admission/v1"
-	"net/http"
 )
 
 func parseAdmRequest(r http.Request) (*v1.AdmissionReview, error) {

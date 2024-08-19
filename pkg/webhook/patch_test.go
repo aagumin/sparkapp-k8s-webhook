@@ -1,11 +1,12 @@
 package webhook
 
 import (
+	"testing"
+
 	"github.com/kubeflow/spark-operator/api/v1beta2"
 	"github.com/stretchr/testify/assert"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"testing"
 )
 
 func TestAddAffinity(t *testing.T) {
@@ -17,9 +18,11 @@ func TestAddAffinity(t *testing.T) {
 		},
 		Spec: v1beta2.SparkApplicationSpec{
 			Driver: v1beta2.DriverSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: nil}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: nil},
+			},
 			Executor: v1beta2.ExecutorSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: nil}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: nil},
+			},
 		},
 	}
 
@@ -45,9 +48,11 @@ func TestAddAffinity_WithExist(t *testing.T) {
 		},
 		Spec: v1beta2.SparkApplicationSpec{
 			Driver: v1beta2.DriverSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: &corev1.Affinity{NodeAffinity: &corev1.NodeAffinity{PreferredDuringSchedulingIgnoredDuringExecution: []corev1.PreferredSchedulingTerm{}}}}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: &corev1.Affinity{NodeAffinity: &corev1.NodeAffinity{PreferredDuringSchedulingIgnoredDuringExecution: []corev1.PreferredSchedulingTerm{}}}},
+			},
 			Executor: v1beta2.ExecutorSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: &corev1.Affinity{NodeAffinity: &corev1.NodeAffinity{PreferredDuringSchedulingIgnoredDuringExecution: []corev1.PreferredSchedulingTerm{}}}}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: &corev1.Affinity{NodeAffinity: &corev1.NodeAffinity{PreferredDuringSchedulingIgnoredDuringExecution: []corev1.PreferredSchedulingTerm{}}}},
+			},
 		},
 	}
 
@@ -73,9 +78,11 @@ func TestAddAffinity_Soft(t *testing.T) {
 		},
 		Spec: v1beta2.SparkApplicationSpec{
 			Driver: v1beta2.DriverSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: nil}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: nil},
+			},
 			Executor: v1beta2.ExecutorSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: nil}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: nil},
+			},
 		},
 	}
 
@@ -101,9 +108,11 @@ func TestAddAffinity_Soft_WithExist(t *testing.T) {
 		},
 		Spec: v1beta2.SparkApplicationSpec{
 			Driver: v1beta2.DriverSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: &corev1.Affinity{NodeAffinity: &corev1.NodeAffinity{PreferredDuringSchedulingIgnoredDuringExecution: []corev1.PreferredSchedulingTerm{}}}}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: &corev1.Affinity{NodeAffinity: &corev1.NodeAffinity{PreferredDuringSchedulingIgnoredDuringExecution: []corev1.PreferredSchedulingTerm{}}}},
+			},
 			Executor: v1beta2.ExecutorSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: &corev1.Affinity{NodeAffinity: &corev1.NodeAffinity{PreferredDuringSchedulingIgnoredDuringExecution: []corev1.PreferredSchedulingTerm{}}}}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Affinity: &corev1.Affinity{NodeAffinity: &corev1.NodeAffinity{PreferredDuringSchedulingIgnoredDuringExecution: []corev1.PreferredSchedulingTerm{}}}},
+			},
 		},
 	}
 
@@ -112,21 +121,22 @@ func TestAddAffinity_Soft_WithExist(t *testing.T) {
 
 	// Then
 	assert.Equal(t, 0, len(patchOps))
-
 }
 
 func TestAddToleration(t *testing.T) {
 	// Given
-	testToleration := []corev1.Toleration{corev1.Toleration{}, corev1.Toleration{}}
+	testToleration := []corev1.Toleration{{}, {}}
 	testSparkApp := &v1beta2.SparkApplication{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: "test-app",
 		},
 		Spec: v1beta2.SparkApplicationSpec{
 			Driver: v1beta2.DriverSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: nil}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: nil},
+			},
 			Executor: v1beta2.ExecutorSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: nil}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: nil},
+			},
 		},
 	}
 
@@ -145,17 +155,19 @@ func TestAddToleration(t *testing.T) {
 
 func TestAddToleration_WithExist(t *testing.T) {
 	// Given
-	testToleration := []corev1.Toleration{corev1.Toleration{}, corev1.Toleration{}}
-	existToleration := []corev1.Toleration{corev1.Toleration{Key: "test1"}, corev1.Toleration{Key: "test2"}}
+	testToleration := []corev1.Toleration{{}, {}}
+	existToleration := []corev1.Toleration{{Key: "test1"}, {Key: "test2"}}
 	testSparkApp := &v1beta2.SparkApplication{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: "test-app",
 		},
 		Spec: v1beta2.SparkApplicationSpec{
 			Driver: v1beta2.DriverSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: existToleration}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: existToleration},
+			},
 			Executor: v1beta2.ExecutorSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: existToleration}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: existToleration},
+			},
 		},
 	}
 
@@ -174,16 +186,18 @@ func TestAddToleration_WithExist(t *testing.T) {
 
 func TestAddToleration_Soft(t *testing.T) {
 	// Given
-	testToleration := []corev1.Toleration{corev1.Toleration{}, corev1.Toleration{}}
+	testToleration := []corev1.Toleration{{}, {}}
 	testSparkApp := &v1beta2.SparkApplication{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: "test-app",
 		},
 		Spec: v1beta2.SparkApplicationSpec{
 			Driver: v1beta2.DriverSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: nil}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: nil},
+			},
 			Executor: v1beta2.ExecutorSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: nil}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: nil},
+			},
 		},
 	}
 
@@ -202,17 +216,19 @@ func TestAddToleration_Soft(t *testing.T) {
 
 func TestAddToleration_Soft_WithExist(t *testing.T) {
 	// Given
-	testToleration := []corev1.Toleration{corev1.Toleration{}, corev1.Toleration{}}
-	existToleration := []corev1.Toleration{corev1.Toleration{Key: "test1"}, corev1.Toleration{Key: "test2"}}
+	testToleration := []corev1.Toleration{{}, {}}
+	existToleration := []corev1.Toleration{{Key: "test1"}, {Key: "test2"}}
 	testSparkApp := &v1beta2.SparkApplication{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: "test-app",
 		},
 		Spec: v1beta2.SparkApplicationSpec{
 			Driver: v1beta2.DriverSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: existToleration}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: existToleration},
+			},
 			Executor: v1beta2.ExecutorSpec{
-				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: existToleration}},
+				SparkPodSpec: v1beta2.SparkPodSpec{Tolerations: existToleration},
+			},
 		},
 	}
 
@@ -221,5 +237,4 @@ func TestAddToleration_Soft_WithExist(t *testing.T) {
 
 	// Then
 	assert.Equal(t, 0, len(patchOps))
-
 }
