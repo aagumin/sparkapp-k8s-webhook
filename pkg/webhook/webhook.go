@@ -75,26 +75,30 @@ func (wh *WebHook) mutateReview(w http.ResponseWriter, r *http.Request) {
 
 	sparkAppPatches := mutateSparkApplication(sparkApp, wh.MutateConfig)
 	slog.Debug(fmt.Sprintf("Successfully patch spark app - %s", sparkAppPatches))
-
+	var patchStatus metav1.Status
 	marshal, err := json.Marshal(sparkAppPatches)
+
 	if err != nil {
-		return
+		patchStatus = metav1.Status{Message: err.Error()}
+	} else {
+		patchStatus = metav1.Status{Message: "successfully patched spark app"}
 	}
-	status := metav1.Status{Message: "Success Patch"}
+
 	patchType := v1.PatchTypeJSONPatch
 
 	admResp := v1.AdmissionResponse{
-		UID:              admReview.Request.UID,
-		Allowed:          true,
-		Result:           &status,
-		Patch:            marshal,
-		PatchType:        &patchType, // BUG!
-		AuditAnnotations: nil,
-		Warnings:         nil,
+		UID:       admReview.Request.UID,
+		Allowed:   true,
+		Result:    &patchStatus,
+		Patch:     marshal,
+		PatchType: &patchType,
 	}
-	slog.Debug(fmt.Sprintf("Successfully marshaled admission response %s", admResp))
 
-	resp, err := json.Marshal(admResp)
+	admReview.Response = &admResp
+	resp, err := json.Marshal(admReview)
+
+	slog.Debug(fmt.Sprintf("Successfully marshaled admission response %s", string(resp)))
+
 	if err != nil {
 		msg := fmt.Sprintf("error marshalling response json: %v", err)
 		slog.Error(msg)
