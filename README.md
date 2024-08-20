@@ -1,6 +1,7 @@
 # Spark Application admission webhook.
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![Go Report Card](https://goreportcard.com/badge/github.com/aagumin/sparkapp-k8s-webhook)](https://goreportcard.com/report/github.com/aagumin/sparkapp-k8s-webhook)
 
 Kubernetes [mutation webhook](https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/)
 for [SparkApplicaton](https://github.com/kubeflow/spark-operator). Mutate spark application upon creation.
