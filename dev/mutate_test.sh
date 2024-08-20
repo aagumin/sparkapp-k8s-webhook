@@ -1,6 +1,6 @@
 curl -X POST --location "https://localhost:443/mutate" \
     -H "Content-Type: application/json" \
-    --cacert ../localhost.crt \
+    --cacert localhost.crt \
     -d '{
           "kind": "AdmissionReview",
           "apiVersion": "admission.k8s.io/v1",
