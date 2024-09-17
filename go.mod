@@ -1,4 +1,4 @@
-module github.com/aagumin/sparkapp-k8s-webhook
+module sparkapp-k8s-webhook
 
 go 1.22.5
 

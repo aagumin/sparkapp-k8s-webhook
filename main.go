@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/aagumin/sparkapp-k8s-webhook/pkg/webhook"
+	"sparkapp-k8s-webhook/pkg/cmd"
 )
 
 func main() {
-	webhook.Execute()
+	cmd.Execute()
 }
