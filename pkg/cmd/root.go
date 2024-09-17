@@ -1,13 +1,10 @@
-package webhook
+package cmd
 
 import (
 	"fmt"
-	"log"
-	"log/slog"
-	"os"
-	"strings"
-
+	wh "github.com/aagumin/sparkapp-k8s-webhook/pkg/webhook"
 	"github.com/spf13/cobra"
+	"log/slog"
 )
 
 var (
@@ -27,10 +24,10 @@ var rootCmd = &cobra.Command{
 	Short: "Kubernetes webhook webhook example",
 	Long:  longDesc,
 	Run: func(cmd *cobra.Command, args []string) {
-		logger := initLogger()
+		logger := wh.InitLogger()
 		var (
-			cfg SparkAppConfig
-			wh  WebHook
+			cfg     wh.SparkAppConfig
+			webHook wh.WebHook
 		)
 
 		if tlsCert == "" || tlsKey == "" {
@@ -38,14 +35,14 @@ var rootCmd = &cobra.Command{
 			slog.Warn("")
 		}
 
-		cfg, err := GetConf(cfgPath)
+		cfg, err := wh.GetConf(cfgPath)
 		if err != nil {
 			panic(err)
 		}
 		slog.Debug(fmt.Sprintf("Config: %+v", cfg))
-		wh = WebHook{MutateConfig: &cfg}
+		webHook = wh.WebHook{MutateConfig: &cfg}
 		slog.Info("Success reading config")
-		wh.RunWebhookServer(tlsCert, tlsKey, port, logger)
+		webHook.RunWebhookServer(tlsCert, tlsKey, port, logger)
 	},
 }
 
@@ -58,26 +55,4 @@ func init() {
 	rootCmd.Flags().StringVar(&tlsKey, "tls-key", "", "Private key file for TLS")
 	rootCmd.Flags().UintVar(&port, "port", 443, "Port to listen on for HTTPS traffic")
 	rootCmd.Flags().StringVar(&cfgPath, "cfgPath", "", "Path to spark webhook config file")
-}
-
-func initLogger() *log.Logger {
-	var logLevel slog.Level
-	logLevelValue := strings.ToUpper(os.Getenv("LOG_LEVEL"))
-	switch logLevelValue {
-	case "":
-		logLevel = slog.LevelInfo
-	case "INFO":
-		logLevel = slog.LevelInfo
-	case "DEBUG":
-		logLevel = slog.LevelDebug
-	case "ERROR":
-		logLevel = slog.LevelError
-	}
-
-	opts := &slog.HandlerOptions{
-		Level: logLevel,
-	}
-	logger := slog.NewLogLogger(slog.NewJSONHandler(os.Stdout, nil), logLevel)
-	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, opts)))
-	return logger
 }
