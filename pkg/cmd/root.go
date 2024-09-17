@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"log/slog"
+
 	wh "github.com/aagumin/sparkapp-k8s-webhook/pkg/webhook"
 	"github.com/spf13/cobra"
-	"log/slog"
 )
 
 var (
@@ -14,15 +15,16 @@ var (
 	cfgPath string
 )
 
-var longDesc = `Example showing how to implement a basic webhook webhook in Kubernetes.
-
-Example:
-$ webhook-webhook --tls-cert <tls_cert> --tls-key <tls_key> --port <port> --cfgPath <cfgPath>`
+var (
+	longDesc = `Example showing how to implement a basic webhook webhook in Kubernetes.`
+	example  = `$ webhook-webhook --tls-cert <tls_cert> --tls-key <tls_key> --port <port> --cfgPath <cfgPath>`
+)
 
 var rootCmd = &cobra.Command{
-	Use:   "webhook-webhook",
-	Short: "Kubernetes webhook webhook example",
-	Long:  longDesc,
+	Use:     "spark-webhook",
+	Short:   "Kubernetes webhook example",
+	Long:    longDesc,
+	Example: example,
 	Run: func(cmd *cobra.Command, args []string) {
 		logger := wh.InitLogger()
 		var (
