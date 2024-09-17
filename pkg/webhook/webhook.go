@@ -8,6 +8,7 @@ import (
 	"log"
 	"log/slog"
 	"net/http"
+	"time"
 
 	"github.com/kubeflow/spark-operator/api/v1beta2"
 	v1 "k8s.io/api/admission/v1"
@@ -136,14 +137,21 @@ func (wh *WebHook) RunWebhookServer(certFile, keyFile string, port uint, logger 
 		panic(err)
 	}
 	slog.Info("Starting webhook server")
-	http.HandleFunc("/health", wh.serveHealth)
-	http.HandleFunc("/mutate", wh.mutateReview)
-	server := http.Server{
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/health", wh.serveHealth)
+	mux.HandleFunc("/mutate", wh.mutateReview)
+
+	server := &http.Server{
 		Addr: fmt.Sprintf(":%d", port),
 		TLSConfig: &tls.Config{
 			Certificates: []tls.Certificate{cert},
 		},
-		ErrorLog: logger,
+		ErrorLog:     logger,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  120 * time.Second,
+		Handler:      mux,
 	}
 
 	if err := server.ListenAndServeTLS("", ""); err != nil {
