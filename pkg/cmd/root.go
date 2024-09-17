@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log/slog"
 
-	wh "github.com/aagumin/sparkapp-k8s-webhook/pkg/webhook"
 	"github.com/spf13/cobra"
+	wh "sparkapp-k8s-webhook/pkg/webhook"
 )
 
 var (
